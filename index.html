@@ -3,32 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Папа, туған күнің құтты болсын! 🎉</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
         *{margin:0;padding:0;box-sizing:border-box;}
+        
         body{
             font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-            /* СВЕТЛЫЙ ФОН */
             background: linear-gradient(135deg, #eff6ff 0%, #fdf2f8 100%);
             color: #374151;
-            height:100vh;
-            overflow:hidden; /* Блокируем скролл всего тела */
+            min-height: 100vh;
+            /* Разрешаем нативный скролл страницы */
+            overflow-x: hidden;
+            overflow-y: auto; 
         }
         
+        /* Контейнер экрана теперь не фиксированный, а просто блок */
         .screen{
-            position:absolute;inset:0;
-            display:none;
-            flex-direction: column;
-            overflow-y: auto; /* Разрешаем скролл внутри экрана */
+            display:none; /* Скрыто по умолчанию */
+            width: 100%;
+            min-height: 100vh; /* Растягиваем на весь экран */
             padding: 20px 16px;
-            -webkit-overflow-scrolling: touch;
-            /* Важно: чтобы контент не прилипал к краям при скролле */
-            overscroll-behavior: contain;
+            
+            /* Центровка содержимого */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         
+        /* Когда экран активен */
         .screen.active{
-            display:flex;
-            animation:fadeIn .5s ease;
+            display:flex; 
+            animation:fadeIn .6s ease forwards;
         }
 
         .card{
@@ -36,18 +41,20 @@
             max-width:840px;
             padding:24px 18px;
             border-radius:24px;
-            background: rgba(255, 255, 255, 0.75);
+            background: rgba(255, 255, 255, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.9);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
             backdrop-filter: blur(20px);
             text-align:center;
-            margin: auto; /* Центрирование */
-            flex-shrink: 0;
+            
+            /* Отступ, чтобы на маленьких экранах не прилипало */
+            margin-top: auto; 
+            margin-bottom: auto;
         }
 
         @keyframes fadeIn{
-            from{opacity:0;transform:translateY(10px) scale(.97);}
-            to{opacity:1;transform:translateY(0) scale(1);}
+            from{opacity:0;transform:translateY(20px);}
+            to{opacity:1;transform:translateY(0);}
         }
         
         .pill{
@@ -115,6 +122,8 @@
             box-shadow: 0 10px 25px rgba(249, 115, 22, 0.3);
             transition:.18s ease;
             display: inline-block;
+            /* Чтобы на мобилке палец легче попадал */
+            min-width: 180px; 
         }
         .btn:hover{
             transform:translateY(-1px);
@@ -178,19 +187,18 @@
         .signature strong{color: #d97706;}
         .firework{
             position:fixed;
-            width:5px;height:5px;
+            width:6px;height:6px;
             border-radius:999px;
             pointer-events:none;
             z-index: 9999;
         }
         
-        @media (max-width:480px){
-            .card{padding:20px 14px;border-radius:18px;}
-            .title-main{font-size:1.55rem;}
-            .text-block p{font-size:.94rem;}
-            .btn{width:100%;padding:11px 0;}
-            .screen { display: block; } 
-            .screen.active { display: flex; min-height: 100%; }
+        /* Адаптация под высоту экрана, чтобы центровка работала красиво */
+        @media (min-height: 800px) {
+            .screen {
+                padding-top: 40px;
+                padding-bottom: 40px;
+            }
         }
     </style>
 </head>
@@ -202,7 +210,7 @@
             <div class="title-main">Папа, туған күнің құтты болсын! 🎉</div>
             <p class="sub">Бүгінгі сайт – саған арнап өзім жасаған шағын, бірақ шын жүректен шыққан сыйлығым.</p>
             <div class="gift">🎁</div>
-            <button class="btn" id="btn0">Ашып көрейік ✨</button>
+            <button class="btn" onclick="goTo(1)">Ашып көрейік ✨</button>
         </div>
     </div>
 
@@ -218,7 +226,7 @@
                 <p>Өміріңде қуаныш көп болып, шаршау мен уайым аз болсын.</p>
                 <p>Маған көрсеткен мейірімің мен қолдауың үшін жүрегімнен үлкен рақмет.</p>
             </div>
-            <button class="btn" id="btn1">Әрі қарай →</button>
+            <button class="btn" onclick="goTo(2)">Әрі қарай →</button>
         </div>
     </div>
 
@@ -233,7 +241,7 @@
                 <p>Үйде тыныштық, жайлылық, өздеріңе ғана түсінікті әдемі әңгіме мен күлкі көп болсын.</p>
                 <p>Күн сайын бірге өткізген қарапайым сәттерің нағыз демалыс пен бақытқа айналсын.</p>
             </div>
-            <button class="btn" id="btn2">Келесі экран →</button>
+            <button class="btn" onclick="goTo(3)">Келесі экран →</button>
         </div>
     </div>
 
@@ -249,7 +257,7 @@
                 <p>Әжемнің жүзінен күлкі кетпесін, жанында бақыт пен береке мол болсын.</p>
 
             </div>
-            <button class="btn" id="btn3">Інілерім→</button>
+            <button class="btn" onclick="goTo(4)">Інілерім→</button>
         </div>
     </div>
 
@@ -264,7 +272,7 @@
                 <p>Күліп қарсы алғаныңды, бірге ойнаған кездеріңді, бізге арнаған уақытыңды ешқашан ұмытпаймыз.</p>
                 <p>Төртеуіміз де өскен сайын саған ұқсап, адал да еңбекқор азамат болғымыз келеді.</p>
             </div>
-            <button class="btn" id="btn4">Тағы тілектер →</button>
+            <button class="btn" onclick="goTo(5)">Тағы тілектер →</button>
         </div>
     </div>
 
@@ -279,7 +287,7 @@
                 <p>Денең жеңіл, ұйқың тыныш, ойыңда қажетсіз уайым аз болсын.</p>
                 <p>Өмір жолың жарық болып, алдыңнан тек жақсылықтар кезіге берсін.</p>
             </div>
-            <button class="btn" id="btn5">Армандар бөлігі →</button>
+            <button class="btn" onclick="goTo(6)">Армандар бөлігі →</button>
         </div>
     </div>
 
@@ -294,7 +302,7 @@
                     <p>Табысың тұрақты болып, еңбегің әділ бағалансын, өз орныңды нық сезінетін ортада жүр.</p>
                     <p>Алға қойған армандарың мен жоспарларың біртіндеп жүзеге асып, «осылай болғанына қуаныштымын» деп айтатын күндер көп болсын.</p>
                 </div>
-            <button class="btn" id="btn6">Келесі →</button>
+            <button class="btn" onclick="goTo(7)">Келесі →</button>
         </div>
     </div>
 
@@ -309,7 +317,7 @@
                 <p>Осының бәрі үшін шын жүректен рақмет.</p>
                 <p>Алдағы өміріңе жақсы жаңалық, жылы кездесу, ұмытылмас сәттер көп қосылсын.</p>
             </div>
-            <button class="btn" id="btn7">Финал 🎆</button>
+            <button class="btn" onclick="goTo(8)">Финал 🎆</button>
         </div>
     </div>
 
@@ -357,101 +365,100 @@
                 <p>Жай ғана: қатты жақсы көремін. ❤️</p>
             </div>
 
-            <button class="btn btn-secondary" id="btnRestart">Басынан бастау ↺</button>
+            <button class="btn btn-secondary" onclick="fullReset()">Басынан бастау ↺</button>
         </div>
     </div>
 
     <script>
-        // --- ВАЖНАЯ ЧАСТЬ: ПРИНУДИТЕЛЬНЫЙ СБРОС ДЛЯ ТЕЛЕФОНОВ ---
-        
-        // Отключаем "умное" восстановление скролла браузером
-        if ('scrollRestoration' in history) {
-            history.scrollRestoration = 'manual';
+        // --- ЕДИНАЯ ФУНКЦИЯ ДЛЯ ВСЕХ СБРОСОВ ---
+        function fullReset() {
+            // 1. Мгновенный скролл наверх
+            window.scrollTo(0, 0);
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+
+            // 2. Скрываем все экраны
+            document.querySelectorAll('.screen').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // 3. Показываем первый
+            const s0 = document.getElementById('screen0');
+            if(s0) s0.classList.add('active');
         }
 
-        // Функция полного сброса
-        function forceReset() {
-            // Скрываем все
-            document.querySelectorAll('.screen').forEach(s => {
-                s.classList.remove('active');
-                s.style.display = ''; // Очищаем инлайн стили если есть
-            });
+        // --- ГЛАВНЫЙ ХАК ДЛЯ ТЕЛЕФОНОВ (pageshow) ---
+        // Это событие срабатывает ВСЕГДА, даже если нажали "Назад" или обновили страницу
+        window.addEventListener('pageshow', function(event) {
+            // Небольшая задержка 10мс, чтобы перебить браузерное восстановление
+            setTimeout(function() {
+                fullReset();
+            }, 10);
+        });
+        
+        // Также на обычный load на всякий случай
+        window.addEventListener('load', function() {
+            setTimeout(fullReset, 10);
+        });
+
+        // --- НАВИГАЦИЯ ---
+        function goTo(n) {
+            // Скролл наверх перед сменой экрана
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            // Показываем только первый
-            const first = document.getElementById('screen0');
-            if (first) {
-                first.classList.add('active');
-                // Скроллим вверх
-                window.scrollTo(0, 0);
-                first.scrollTo(0, 0);
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+            const next = document.getElementById('screen'+n);
+            if(next) {
+                next.classList.add('active');
+            }
+            
+            if(n === 8) { // Если это финал
+                startFireworks();
             }
         }
 
-        // Срабатывает при первой загрузке
-        document.addEventListener('DOMContentLoaded', forceReset);
-
-        // Срабатывает при нажатии кнопки "Назад" или обновлении на мобильном (bfcache)
-        window.addEventListener('pageshow', function(event) {
-            forceReset();
-        });
-
-        // --- КОНЕЦ ВАЖНОЙ ЧАСТИ ---
-
-
-        function showScreen(n){
-            document.querySelectorAll('.screen').forEach(s => {
-                s.classList.remove('active');
-                s.scrollTo(0, 0); // Сбрасываем скролл внутри экрана
-            });
-            
-            const el=document.getElementById('screen'+n);
-            if(el) el.classList.add('active');
-        }
-
-        document.getElementById('btn0').onclick=()=>showScreen(1);
-        document.getElementById('btn1').onclick=()=>showScreen(2);
-        document.getElementById('btn2').onclick=()=>showScreen(3);
-        document.getElementById('btn3').onclick=()=>showScreen(4);
-        document.getElementById('btn4').onclick=()=>showScreen(5);
-        document.getElementById('btn5').onclick=()=>showScreen(6);
-        document.getElementById('btn6').onclick=()=>showScreen(7);
-        document.getElementById('btn7').onclick=()=>{
-            showScreen(8);
-            startFireworks();
-        };
-
-        document.getElementById('btnRestart').onclick=()=>{
-            // Используем ту же жесткую функцию сброса
-            forceReset();
-        };
-
+        // --- ФЕЙЕРВЕРКИ ---
         function startFireworks(){
-            setInterval(createFirework,320);
+            // Запускаем, но не бесконечно плодим интервалы
+            if(window.fwInterval) return; 
+            window.fwInterval = setInterval(createFirework, 400);
         }
+        
         function createFirework(){
             const colors=['#facc15','#fb7185','#38bdf8','#4ade80','#c4b5fd'];
-            const x=Math.random()*window.innerWidth;
-            const y=Math.random()*window.innerHeight*0.6;
-            for(let i=0;i<24;i++){
+            // Случайная позиция
+            const x = Math.random() * Math.min(window.innerWidth, 800); // Чтобы не улетало за край на широких экранах
+            const startY = window.innerHeight;
+            const endY = window.innerHeight * 0.2 + Math.random() * (window.innerHeight * 0.4);
+            
+            for(let i=0;i<20;i++){
                 const el=document.createElement('div');
                 el.className='firework';
-                el.style.left=x+'px';
-                el.style.top=y+'px';
+                
+                // Позиционируем относительно viewport (fixed)
+                el.style.left = (Math.random() * window.innerWidth) + 'px';
+                el.style.top = (Math.random() * window.innerHeight * 0.6) + 'px';
+                
                 el.style.background=colors[Math.floor(Math.random()*colors.length)];
-                const angle=(Math.PI*2*i)/24;
-                const v=50+Math.random()*70;
+                
+                // Разлет
+                const angle=(Math.PI*2*i)/20;
+                const v=60+Math.random()*60;
                 const tx=Math.cos(angle)*v;
                 const ty=Math.sin(angle)*v;
-                el.style.transition='transform 1.2s ease-out, opacity 1.2s ease-out';
+                
+                el.style.transition='transform 1s ease-out, opacity 1s ease-out';
                 document.body.appendChild(el);
+                
                 requestAnimationFrame(()=>{
                     el.style.transform=`translate(${tx}px,${ty}px)`;
                     el.style.opacity='0';
                 });
-                setTimeout(()=>el.remove(),1200);
+                setTimeout(()=>el.remove(),1000);
             }
         }
 
+        // Эффект кликов (сердечки/звездочки)
         document.addEventListener('click',e=>{
             if(e.target.tagName === 'BUTTON') return;
             
@@ -460,12 +467,14 @@
             s.style.position='fixed';
             s.style.left=e.clientX+'px';
             s.style.top=e.clientY+'px';
-            s.style.fontSize='22px';
+            s.style.fontSize='24px';
             s.style.pointerEvents='none';
+            s.style.zIndex='10000';
             s.style.transition='transform .8s ease-out, opacity .8s ease-out';
             document.body.appendChild(s);
+            
             requestAnimationFrame(()=>{
-                s.style.transform='translateY(-30px) scale(1.5)';
+                s.style.transform='translateY(-40px) scale(1.5)';
                 s.style.opacity='0';
             });
             setTimeout(()=>s.remove(),800);
